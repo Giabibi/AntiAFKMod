@@ -1,0 +1,26 @@
+{
+    "schemaVersion": 1,
+    "id": "antiafkmod",
+    "version": "${version}",
+    "name": "Anti AFK Mod",
+    "description": "This is a client mod to avoid the AFK status.",
+    "authors": ["Giabibi"],
+    "license": "MIT",
+    "environment": "*",
+    "entrypoints": {
+        "client": ["com.giabibi.antiafkmod.AntiAfkModClient"],
+        "modmenu": ["com.giabibi.antiafkmod.AntiAfkModModMenuIntegration"]
+    },
+    "depends": {
+        "fabricloader": ">=0.15.7",
+        "minecraft": "1.20.4",
+        "fabric-api": "*",
+        "modmenu": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "update_checker": true
+        }
+    },
+    "icon": "assets/antiafkmod/icon.png"
+}
