@@ -41,6 +41,27 @@ public class AntiAfkModMenu {
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.move = newValue)
                 .build());
 
+        general.addEntry(entry.startFloatField(Text.of("Puissance max rotation Yaw"), AntiAfkModClient.config.maxYawStrength)
+                .setDefaultValue(3.0f)
+                .setMin(0.0f)
+                .setMax(10.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxYawStrength = newValue)
+                .build());
+
+        general.addEntry(entry.startFloatField(Text.of("Puissance max rotation Pitch"), AntiAfkModClient.config.maxPitchStrength)
+                .setDefaultValue(2.0f)
+                .setMin(0.0f)
+                .setMax(10.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxPitchStrength = newValue)
+                .build());
+
+        general.addEntry(entry.startFloatField(Text.of("Intensité aléatoire de mouvement"), AntiAfkModClient.config.maxMoveIntensity)
+                .setDefaultValue(1.0f)
+                .setMin(0.0f)
+                .setMax(1.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxMoveIntensity = newValue)
+                .build());
+
         general.addEntry(entry.startDoubleField(Text.of("Distance max de mouvement"), AntiAfkModClient.config.maxMoveDistance)
                 .setDefaultValue(0.2)
                 .setMin(0.01)

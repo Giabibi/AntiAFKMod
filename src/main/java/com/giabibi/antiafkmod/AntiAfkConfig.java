@@ -12,6 +12,9 @@ public class AntiAfkConfig {
     public boolean move = true;
     public boolean look = true;
     public boolean jump = false;
+    public float maxYawStrength = 3.0f;
+    public float maxPitchStrength = 2.0f;
+    public float maxMoveIntensity = 1.0f;
     public double maxMoveDistance = 0.2;
     public String keyToggleAfk = "key.keyboard.k";
 

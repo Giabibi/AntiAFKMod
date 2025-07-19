@@ -53,15 +53,20 @@ public class AntiAfkModClient implements ClientModInitializer {
                 if (config.look) {
                     float currentYaw = client.player.getYaw();
                     float currentPitch = client.player.getPitch();
-                    float deltaYaw = (float)(Math.random() * 2.0 - 1.0);
-                    float deltaPitch = (float)(Math.random() * 1.0 - 0.5);
+                    float yawStrength = (float)(Math.random() * config.maxYawStrength);
+                    float pitchStrength = (float)(Math.random() * config.maxPitchStrength);
+                    float deltaYaw = (float)((Math.random() * 2.0 - 1.0) * yawStrength);
+                    float deltaPitch = (float)((Math.random() * 2.0 - 1.0) * pitchStrength);
                     client.player.setYaw(currentYaw + deltaYaw);
                     client.player.setPitch(currentPitch + deltaPitch);
                 }
 
                 if (config.move) {
-                    double dx = (Math.random() - 0.5) * config.maxMoveDistance;
-                    double dz = (Math.random() - 0.5) * config.maxMoveDistance;
+                    double intensity = Math.random() * config.maxMoveIntensity;
+                    double moveDistance = intensity * config.maxMoveDistance;
+                    double angle = Math.random() * 2 * Math.PI;
+                    double dx = Math.cos(angle) * moveDistance;
+                    double dz = Math.sin(angle) * moveDistance;
                     double newX = client.player.getX() + dx;
                     double newZ = client.player.getZ() + dz;
                     double y = client.player.getY();
