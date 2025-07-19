@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-07-19
+
+### Added
+
+-   New config options to **repeat head movements** during each anti-AFK action:
+
+    -   `minHeadRepeats`, `maxHeadRepeats`
+    -   `headRepeatDelayMs`
+
+-   Added **AFK countdown HUD** displaying the time remaining until the next action
+-   Keybind (`H` by default) to **toggle the HUD visibility** in-game
+-   Configurable HUD position:
+
+    -   `hudX`, `hudY` offsets (in pixels)
+
+-   HUD now supports a **background box** behind the timer (toggleable)
+-   New ModMenu category: _Timer_, with all HUD and interval settings grouped
+-   Added detailed **tooltips** (in English and French) for all new fields
+
+### Changed
+
+-   Head movement system now supports multiple repeated motions per AFK event
+-   Timer interval logic now uses a true float-based random duration between min and max values
+
+---
+
 ## [1.1.0] - 2025-07-19
 
 ### Added
