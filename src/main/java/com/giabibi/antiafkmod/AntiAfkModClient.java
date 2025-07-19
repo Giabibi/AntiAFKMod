@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Formatting;
 
 public class AntiAfkModClient implements ClientModInitializer {
 
@@ -118,7 +119,8 @@ public class AntiAfkModClient implements ClientModInitializer {
             while (toggleAfkKey.wasPressed()) {
                 antiAfkEnabled = !antiAfkEnabled;
                 client.player.sendMessage(
-                    net.minecraft.text.Text.of("[AntiAFK] Mode " + (antiAfkEnabled ? "activé" : "désactivé")),
+                    net.minecraft.text.Text.literal("[AntiAFK] Mode " + (antiAfkEnabled ? "activé" : "désactivé"))
+                        .formatted(antiAfkEnabled ? Formatting.GREEN : Formatting.RED),
                     false
                 );
                 restartAfkTimer();
