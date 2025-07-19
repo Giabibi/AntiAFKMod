@@ -38,11 +38,16 @@ public class AntiAfkModClient implements ClientModInitializer {
     private static void startAfkTimer() {
         if (!antiAfkEnabled) return;
 
+        float min = Math.min(config.minIntervalMinutes, config.maxIntervalMinutes);
+        float max = Math.max(config.minIntervalMinutes, config.maxIntervalMinutes);
+        float interval = min + (float) Math.random() * (max - min);
+
+        long delay = (long)(interval * 60 * 1000);
+
         afkTimer = new Timer();
-        afkTimer.scheduleAtFixedRate(new TimerTask() {
+        afkTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                MinecraftClient client = MinecraftClient.getInstance();
                 if (client.player == null || client.world == null || !antiAfkEnabled) return;
 
                 if (config.look) {
@@ -68,8 +73,10 @@ public class AntiAfkModClient implements ClientModInitializer {
                 }
 
                 System.out.println("[AntiAFK] Action anti-AFK exécutée");
+
+                startAfkTimer();
             }
-        }, 0, config.intervalMinutes * 60L * 1000L);
+        }, delay);
     }
 
     @Override

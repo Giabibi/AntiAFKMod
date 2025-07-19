@@ -19,11 +19,18 @@ public class AntiAfkModMenu {
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.enabled = newValue)
                 .build());
 
-        general.addEntry(entry.startIntField(Text.of("Intervalle (minutes)"), AntiAfkModClient.config.intervalMinutes)
-                .setDefaultValue(30)
-                .setMin(1)
-                .setMax(120)
-                .setSaveConsumer(newValue -> AntiAfkModClient.config.intervalMinutes = newValue)
+        general.addEntry(entry.startFloatField(Text.of("Intervalle minimum (minutes)"), AntiAfkModClient.config.minIntervalMinutes)
+                .setDefaultValue(30.0f)
+                .setMin(1.0f)
+                .setMax(240.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.minIntervalMinutes = newValue)
+                .build());
+
+        general.addEntry(entry.startFloatField(Text.of("Intervalle maximum (minutes)"), AntiAfkModClient.config.maxIntervalMinutes)
+                .setDefaultValue(60.0f)
+                .setMin(1.0f)
+                .setMax(240.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxIntervalMinutes = newValue)
                 .build());
 
         general.addEntry(entry.startBooleanToggle(Text.of("Bouger la tête (look)"), AntiAfkModClient.config.look)

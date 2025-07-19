@@ -7,7 +7,8 @@ import java.io.*;
 
 public class AntiAfkConfig {
     public boolean enabled = false;
-    public int intervalMinutes = 30;
+    public float minIntervalMinutes = 30.0f;
+    public float maxIntervalMinutes = 60.0f;
     public boolean move = true;
     public boolean look = true;
     public boolean jump = false;
