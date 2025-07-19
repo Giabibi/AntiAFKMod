@@ -14,28 +14,13 @@ public class AntiAfkModMenu {
 
         ConfigEntryBuilder entry = builder.entryBuilder();
         ConfigCategory general = builder.getOrCreateCategory(Text.of("Général"));
+        ConfigCategory timer = builder.getOrCreateCategory(Text.of("Timer"));
         ConfigCategory movement = builder.getOrCreateCategory(Text.of("Mouvements"));
         ConfigCategory look = builder.getOrCreateCategory(Text.of("Regard"));
 
         general.addEntry(entry.startBooleanToggle(Text.of("Activer le mod"), AntiAfkModClient.config.enabled)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.enabled = newValue)
                 .setTooltip(Text.of("Active ou désactive complètement le mod"))
-                .build());
-
-        general.addEntry(entry.startFloatField(Text.of("Intervalle minimum (minutes)"), AntiAfkModClient.config.minIntervalMinutes)
-                .setDefaultValue(30.0f)
-                .setMin(0.1f)
-                .setMax(240.0f)
-                .setSaveConsumer(newValue -> AntiAfkModClient.config.minIntervalMinutes = newValue)
-                .setTooltip(Text.of("Délai minimum entre deux actions anti-AFK"))
-                .build());
-
-        general.addEntry(entry.startFloatField(Text.of("Intervalle maximum (minutes)"), AntiAfkModClient.config.maxIntervalMinutes)
-                .setDefaultValue(60.0f)
-                .setMin(0.1f)
-                .setMax(240.0f)
-                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxIntervalMinutes = newValue)
-                .setTooltip(Text.of("Délai maximum entre deux actions anti-AFK"))
                 .build());
 
         general.addEntry(entry.startBooleanToggle(Text.of("Bouger la tête (look)"), AntiAfkModClient.config.look)
@@ -53,6 +38,43 @@ public class AntiAfkModMenu {
                 .setTooltip(Text.of("Effectue un saut aléatoire de temps en temps"))
                 .build());
 
+        timer.addEntry(entry.startBooleanToggle(Text.of("Afficher le minuteur HUD"), AntiAfkModClient.config.showHudTimer)
+                .setTooltip(Text.of("Affiche un compte à rebours avant la prochaine action anti-AFK"))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.showHudTimer = newValue)
+                .build());
+
+        timer.addEntry(entry.startFloatField(Text.of("Intervalle minimum (minutes)"), AntiAfkModClient.config.minIntervalMinutes)
+                .setDefaultValue(30.0f)
+                .setMin(0.1f)
+                .setMax(240.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.minIntervalMinutes = newValue)
+                .setTooltip(Text.of("Délai minimum entre deux actions anti-AFK"))
+                .build());
+
+        timer.addEntry(entry.startFloatField(Text.of("Intervalle maximum (minutes)"), AntiAfkModClient.config.maxIntervalMinutes)
+                .setDefaultValue(60.0f)
+                .setMin(0.1f)
+                .setMax(240.0f)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxIntervalMinutes = newValue)
+                .setTooltip(Text.of("Délai maximum entre deux actions anti-AFK"))
+                .build());
+
+        timer.addEntry(entry.startIntField(Text.of("HUD X position"), AntiAfkModClient.config.hudX)
+                .setTooltip(Text.of("Décalage horizontal du minuteur (en pixels)"))
+                .setDefaultValue(10)
+                .setMin(0)
+                .setMax(10000) // limite haute arbitraire
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.hudX = newValue)
+                .build());
+
+        timer.addEntry(entry.startIntField(Text.of("HUD Y position"), AntiAfkModClient.config.hudY)
+                .setTooltip(Text.of("Décalage vertical du minuteur (en pixels)"))
+                .setDefaultValue(10)
+                .setMin(0)
+                .setMax(10000)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.hudY = newValue)
+                .build());
+
         look.addEntry(entry.startIntField(Text.of("Nombre d'étapes du mouvement de tête"), AntiAfkModClient.config.headMovementSteps)
                 .setDefaultValue(20)
                 .setMin(1)
@@ -63,7 +85,7 @@ public class AntiAfkModMenu {
 
         look.addEntry(entry.startIntField(Text.of("Délai entre les étapes (ms)"), AntiAfkModClient.config.headMovementDelayMs)
                 .setDefaultValue(10)
-                .setMin(10)
+                .setMin(1)
                 .setMax(1000)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.headMovementDelayMs = newValue)
                 .setTooltip(Text.of("Délai (en millisecondes) entre chaque étape du mouvement de tête"))
@@ -85,27 +107,27 @@ public class AntiAfkModMenu {
                 .setTooltip(Text.of("Amplitude verticale maximale de la rotation de la tête (en degrés)"))
                 .build());
 
-        look.addEntry(entry.startIntField(Text.of("Delay between head moves (ms)"), AntiAfkModClient.config.headRepeatDelayMs)
+        look.addEntry(entry.startIntField(Text.of("Délai entre les mouvements de tête (ms)"), AntiAfkModClient.config.headRepeatDelayMs)
                 .setDefaultValue(100)
                 .setMin(10)
                 .setMax(1000)
-                .setTooltip(Text.of("Delay between each head rotation when repeating"))
+                .setTooltip(Text.of("Délai entre chaque mouvement de tête lors d'une répétition"))
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.headRepeatDelayMs = newValue)
                 .build());
 
-        look.addEntry(entry.startIntField(Text.of("Min head movements"), AntiAfkModClient.config.minHeadRepeats)
+        look.addEntry(entry.startIntField(Text.of("Nombre minimum de mouvements de tête"), AntiAfkModClient.config.minHeadRepeats)
                 .setDefaultValue(1)
                 .setMin(1)
-                .setMax(20)
-                .setTooltip(Text.of("Minimum head movement repetitions per anti-AFK event"))
+                .setMax(50)
+                .setTooltip(Text.of("Nombre minimum de répétitions de mouvements de tête par action anti-AFK"))
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.minHeadRepeats = newValue)
                 .build());
 
-        look.addEntry(entry.startIntField(Text.of("Max head movements"), AntiAfkModClient.config.maxHeadRepeats)
+        look.addEntry(entry.startIntField(Text.of("Nombre maximum de mouvements de tête"), AntiAfkModClient.config.maxHeadRepeats)
                 .setDefaultValue(5)
                 .setMin(1)
-                .setMax(20)
-                .setTooltip(Text.of("Maximum head movement repetitions per anti-AFK event"))
+                .setMax(50)
+                .setTooltip(Text.of("Nombre maximum de répétitions de mouvements de tête par action anti-AFK"))
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.maxHeadRepeats = newValue)
                 .build());
 

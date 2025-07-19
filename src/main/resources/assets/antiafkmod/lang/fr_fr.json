@@ -1,4 +1,5 @@
 {
     "key.antiafkmod.toggle": "Activer/désactiver Anti-AFK",
+    "key.antiafkmod.togglehud": "Activer/désactiver HUD",
     "key.categories.antiafkmod": "AntiAFKMod"
 }

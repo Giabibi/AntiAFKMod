@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -17,6 +18,11 @@ public class AntiAfkModClient implements ClientModInitializer {
     // Key enable/disable
     private static KeyBinding toggleAfkKey;
     private static boolean antiAfkEnabled = false;
+
+    // Show HUD
+    private static KeyBinding toggleHudKey;
+    private static boolean showHud = true;
+    private static long nextAfkTime = 0;
 
     // Intervalle
     private static Timer afkTimer;
@@ -63,6 +69,7 @@ public class AntiAfkModClient implements ClientModInitializer {
         float interval = min + (float) Math.random() * (max - min);
 
         long delay = (long)(interval * 60 * 1000);
+        nextAfkTime = System.currentTimeMillis() + delay;
 
         afkTimer = new Timer();
         afkTimer.schedule(new TimerTask() {
@@ -114,26 +121,70 @@ public class AntiAfkModClient implements ClientModInitializer {
         config = AntiAfkConfig.load();
 
         antiAfkEnabled = config.enabled;
+        showHud = config.showHudTimer;
         startAfkTimer();
-        InputUtil.Key key = InputUtil.fromTranslationKey(config.keyToggleAfk);
+        InputUtil.Key afkKey = InputUtil.fromTranslationKey(config.keyToggleAfk);
         toggleAfkKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.antiafkmod.toggle",
-            key.getCode(),
+            afkKey.getCode(),
             "key.categories.antiafkmod"
         ));
+        InputUtil.Key hudKey = InputUtil.fromTranslationKey(config.keyToggleHud);
+        toggleHudKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.antiafkmod.togglehud",
+            hudKey.getCode(),
+            "key.categories.antiafkmod"
+        ));
+
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (toggleAfkKey.wasPressed()) {
                 antiAfkEnabled = !antiAfkEnabled;
                 client.player.sendMessage(
-                    net.minecraft.text.Text.literal("[AntiAFK] Mode " + (antiAfkEnabled ? "activé" : "désactivé"))
-                        .formatted(antiAfkEnabled ? Formatting.GREEN : Formatting.RED),
+                        net.minecraft.text.Text.literal("[AntiAFK] Mode " + (antiAfkEnabled ? "activé" : "désactivé"))
+                                .formatted(antiAfkEnabled ? Formatting.GREEN : Formatting.RED),
+                        false);
+                restartAfkTimer();
+            }
+            while (toggleHudKey.wasPressed()) {
+                showHud = !showHud;
+                client.player.sendMessage(
+                    net.minecraft.text.Text.literal("[AntiAFK] HUD " + (showHud ? "enabled" : "disabled"))
+                            .formatted(Formatting.AQUA),
                     false
                 );
-                restartAfkTimer();
             }
         });
 
-        System.out.println("[AntiAfkMod] Mod client initialisé avec raccourci K");
+        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+            if (!antiAfkEnabled || !showHud) return;
+
+            long now = System.currentTimeMillis();
+            long remaining = nextAfkTime - now;
+
+            if (remaining > 0) {
+                int seconds = (int) (remaining / 1000) % 60;
+                int minutes = (int) (remaining / (60 * 1000));
+
+                String text = String.format("Prochain AFK: %02d:%02d", minutes, seconds);
+                int x = config.hudX;
+                int y = config.hudY;
+
+                drawContext.drawText(client.textRenderer, text, x, y, 0xFFFFFF, true);
+
+                int textWidth = client.textRenderer.getWidth(text);
+                int padding = 4;
+                int bgX1 = x - padding;
+                int bgY1 = y - padding;
+                int bgX2 = x + textWidth + padding;
+                int bgY2 = y + 10 + padding;
+
+                drawContext.fill(bgX1, bgY1, bgX2, bgY2, 0x90000000);
+                drawContext.drawText(client.textRenderer, text, x, y, 0xFFFFFF, true);
+            }
+        });
+
+
+        System.out.println("[AntiAfkMod] Mod client initialisé");
     }
 }

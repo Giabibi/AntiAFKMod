@@ -7,11 +7,15 @@ import java.io.*;
 
 public class AntiAfkConfig {
     public boolean enabled = false;
-    public float minIntervalMinutes = 30.0f;
-    public float maxIntervalMinutes = 60.0f;
     public boolean move = true;
     public boolean look = true;
     public boolean jump = false;
+
+    public boolean showHudTimer = true;
+    public float minIntervalMinutes = 30.0f;
+    public float maxIntervalMinutes = 60.0f;
+    public int hudX = 10;
+    public int hudY = 10;
 
     public int headMovementSteps = 20;
     public int headMovementDelayMs = 10;
@@ -25,6 +29,7 @@ public class AntiAfkConfig {
     public double maxMoveDistance = 0.2;
 
     public String keyToggleAfk = "key.keyboard.k";
+    public String keyToggleHud = "key.keyboard.h";
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File("config/antiafkmod.json");
