@@ -19,6 +19,20 @@ public class AntiAfkModMenu {
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.enabled = newValue)
                 .build());
 
+        general.addEntry(entry.startIntField(Text.of("Nombre d'étapes du mouvement de tête"), AntiAfkModClient.config.headMovementSteps)
+                .setDefaultValue(5)
+                .setMin(1)
+                .setMax(20)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.headMovementSteps = newValue)
+                .build());
+
+        general.addEntry(entry.startIntField(Text.of("Délai entre les étapes (ms)"), AntiAfkModClient.config.headMovementDelayMs)
+                .setDefaultValue(150)
+                .setMin(10)
+                .setMax(1000)
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.headMovementDelayMs = newValue)
+                .build());
+
         general.addEntry(entry.startFloatField(Text.of("Intervalle minimum (minutes)"), AntiAfkModClient.config.minIntervalMinutes)
                 .setDefaultValue(30.0f)
                 .setMin(1.0f)

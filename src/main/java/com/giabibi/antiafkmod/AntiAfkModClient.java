@@ -23,6 +23,25 @@ public class AntiAfkModClient implements ClientModInitializer {
     // Config
     public static AntiAfkConfig config = new AntiAfkConfig();
 
+    private static void moveHeadHumanLike(float deltaYaw, float deltaPitch) {
+        int steps = config.headMovementSteps;
+            long delayBetweenSteps = config.headMovementDelayMs;
+
+        Timer animationTimer = new Timer();
+        for (int i = 1; i <= steps; i++) {
+            animationTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (client.player == null) return;
+                    float yawIncrement = deltaYaw / steps;
+                    float pitchIncrement = deltaPitch / steps;
+                    client.player.setYaw(client.player.getYaw() + yawIncrement);
+                    client.player.setPitch(client.player.getPitch() + pitchIncrement);
+                }
+            }, i * delayBetweenSteps);
+        }
+    }
+
     public static void saveConfig() {
         AntiAfkConfig.save(config);
         restartAfkTimer();
@@ -51,14 +70,12 @@ public class AntiAfkModClient implements ClientModInitializer {
                 if (client.player == null || client.world == null || !antiAfkEnabled) return;
 
                 if (config.look) {
-                    float currentYaw = client.player.getYaw();
-                    float currentPitch = client.player.getPitch();
                     float yawStrength = (float)(Math.random() * config.maxYawStrength);
                     float pitchStrength = (float)(Math.random() * config.maxPitchStrength);
                     float deltaYaw = (float)((Math.random() * 2.0 - 1.0) * yawStrength);
-                    float deltaPitch = (float)((Math.random() * 2.0 - 1.0) * pitchStrength);
-                    client.player.setYaw(currentYaw + deltaYaw);
-                    client.player.setPitch(currentPitch + deltaPitch);
+                    float deltaPitch = (float) ((Math.random() * 2.0 - 1.0) * pitchStrength);
+
+                    moveHeadHumanLike(deltaYaw, deltaPitch);
                 }
 
                 if (config.move) {
