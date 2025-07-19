@@ -54,7 +54,7 @@ public class AntiAfkModMenu {
                 .build());
 
         look.addEntry(entry.startIntField(Text.of("Nombre d'étapes du mouvement de tête"), AntiAfkModClient.config.headMovementSteps)
-                .setDefaultValue(5)
+                .setDefaultValue(20)
                 .setMin(1)
                 .setMax(20)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.headMovementSteps = newValue)
@@ -62,7 +62,7 @@ public class AntiAfkModMenu {
                 .build());
 
         look.addEntry(entry.startIntField(Text.of("Délai entre les étapes (ms)"), AntiAfkModClient.config.headMovementDelayMs)
-                .setDefaultValue(150)
+                .setDefaultValue(10)
                 .setMin(10)
                 .setMax(1000)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.headMovementDelayMs = newValue)
@@ -70,20 +70,45 @@ public class AntiAfkModMenu {
                 .build());
 
         look.addEntry(entry.startFloatField(Text.of("Puissance max rotation Yaw"), AntiAfkModClient.config.maxYawStrength)
-                .setDefaultValue(15.0f)
+                .setDefaultValue(90.0f)
                 .setMin(0.0f)
-                .setMax(90.0f)
+                .setMax(180.0f)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.maxYawStrength = newValue)
                 .setTooltip(Text.of("Amplitude horizontale maximale de la rotation de la tête (en degrés)"))
                 .build());
 
         look.addEntry(entry.startFloatField(Text.of("Puissance max rotation Pitch"), AntiAfkModClient.config.maxPitchStrength)
-                .setDefaultValue(10.0f)
+                .setDefaultValue(30.0f)
                 .setMin(0.0f)
                 .setMax(60.0f)
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.maxPitchStrength = newValue)
                 .setTooltip(Text.of("Amplitude verticale maximale de la rotation de la tête (en degrés)"))
                 .build());
+
+        look.addEntry(entry.startIntField(Text.of("Delay between head moves (ms)"), AntiAfkModClient.config.headRepeatDelayMs)
+                .setDefaultValue(100)
+                .setMin(10)
+                .setMax(1000)
+                .setTooltip(Text.of("Delay between each head rotation when repeating"))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.headRepeatDelayMs = newValue)
+                .build());
+
+        look.addEntry(entry.startIntField(Text.of("Min head movements"), AntiAfkModClient.config.minHeadRepeats)
+                .setDefaultValue(1)
+                .setMin(1)
+                .setMax(20)
+                .setTooltip(Text.of("Minimum head movement repetitions per anti-AFK event"))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.minHeadRepeats = newValue)
+                .build());
+
+        look.addEntry(entry.startIntField(Text.of("Max head movements"), AntiAfkModClient.config.maxHeadRepeats)
+                .setDefaultValue(5)
+                .setMin(1)
+                .setMax(20)
+                .setTooltip(Text.of("Maximum head movement repetitions per anti-AFK event"))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.maxHeadRepeats = newValue)
+                .build());
+
 
         movement.addEntry(entry.startFloatField(Text.of("Intensité aléatoire de mouvement"), AntiAfkModClient.config.maxMoveIntensity)
                 .setDefaultValue(1.0f)

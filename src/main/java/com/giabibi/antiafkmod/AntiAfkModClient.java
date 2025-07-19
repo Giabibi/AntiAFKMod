@@ -71,12 +71,19 @@ public class AntiAfkModClient implements ClientModInitializer {
                 if (client.player == null || client.world == null || !antiAfkEnabled) return;
 
                 if (config.look) {
-                    float yawStrength = (float)(Math.random() * config.maxYawStrength);
-                    float pitchStrength = (float)(Math.random() * config.maxPitchStrength);
-                    float deltaYaw = (float)((Math.random() * 2.0 - 1.0) * yawStrength);
-                    float deltaPitch = (float) ((Math.random() * 2.0 - 1.0) * pitchStrength);
-
-                    moveHeadHumanLike(deltaYaw, deltaPitch);
+                    int repeats = config.minHeadRepeats + (int)(Math.random() * (config.maxHeadRepeats - config.minHeadRepeats + 1));
+                    for (int i = 0; i < repeats; i++) {
+                        float yawStrength = (float)(Math.random() * config.maxYawStrength);
+                        float pitchStrength = (float)(Math.random() * config.maxPitchStrength);
+                        float deltaYaw = (float)((Math.random() * 2.0 - 1.0) * yawStrength);
+                        float deltaPitch = (float)((Math.random() * 2.0 - 1.0) * pitchStrength);
+                        moveHeadHumanLike(deltaYaw, deltaPitch);
+                        try {
+                            Thread.sleep(config.headRepeatDelayMs);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
                 if (config.move) {

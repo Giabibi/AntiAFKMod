@@ -7,17 +7,23 @@ import java.io.*;
 
 public class AntiAfkConfig {
     public boolean enabled = false;
-    public int headMovementSteps = 5;
-    public int headMovementDelayMs = 150;
     public float minIntervalMinutes = 30.0f;
     public float maxIntervalMinutes = 60.0f;
     public boolean move = true;
     public boolean look = true;
     public boolean jump = false;
-    public float maxYawStrength = 3.0f;
-    public float maxPitchStrength = 2.0f;
+
+    public int headMovementSteps = 20;
+    public int headMovementDelayMs = 10;
+    public float maxYawStrength = 90.0f;
+    public float maxPitchStrength = 30.0f;
+    public int headRepeatDelayMs = 100;
+    public int minHeadRepeats = 1;
+    public int maxHeadRepeats = 5;
+
     public float maxMoveIntensity = 1.0f;
     public double maxMoveDistance = 0.2;
+
     public String keyToggleAfk = "key.keyboard.k";
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
