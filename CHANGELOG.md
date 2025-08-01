@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-08-01
+
+### Added
+
+-   **Teleportation detection**:
+
+    -   New config: `disconnectOnTeleport` – if enabled, the player will be automatically **disconnected** upon unexpected teleportation.
+    -   New config: `disableAfkOnTeleport` – if enabled, the **AntiAFK system is paused** instead of disconnecting when teleportation is detected.
+
+-   The player's initial position is now tracked and compared before each AFK action.
+-   Compatibility improvements with servers that might move players to test for AFK behavior.
+
+### Changed
+
+-   Refactored `AFK action` logic to be more robust and safer on unexpected world state changes.
+
+---
+
 ## [1.2.0] - 2025-07-19
 
 ### Added

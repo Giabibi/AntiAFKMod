@@ -38,6 +38,16 @@ public class AntiAfkModMenu {
                 .setTooltip(Text.of("Effectue un saut aléatoire de temps en temps"))
                 .build());
 
+        general.addEntry(entry.startBooleanToggle(Text.of("Déconnexion si téléporté"), AntiAfkModClient.config.disconnectOnTeleport)
+                .setTooltip(Text.of("Déconnecte le joueur du serveur si une téléportation est détectée."))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.disconnectOnTeleport = newValue)
+                .build());
+
+        general.addEntry(entry.startBooleanToggle(Text.of("Désactiver le mod si téléporté"), AntiAfkModClient.config.disableAfkOnTeleport)
+                .setTooltip(Text.of("Désactive le mod Anti-AFK si une téléportation est détectée."))
+                .setSaveConsumer(newValue -> AntiAfkModClient.config.disableAfkOnTeleport = newValue)
+                .build());
+
         timer.addEntry(entry.startBooleanToggle(Text.of("Afficher le minuteur HUD"), AntiAfkModClient.config.showHudTimer)
                 .setTooltip(Text.of("Affiche un compte à rebours avant la prochaine action anti-AFK"))
                 .setSaveConsumer(newValue -> AntiAfkModClient.config.showHudTimer = newValue)

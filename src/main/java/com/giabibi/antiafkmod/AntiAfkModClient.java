@@ -19,6 +19,11 @@ public class AntiAfkModClient implements ClientModInitializer {
     private static KeyBinding toggleAfkKey;
     private static boolean antiAfkEnabled = false;
 
+    // Position to check teleportation
+    private static double lastX = Double.NaN;
+    private static double lastY = Double.NaN;
+    private static double lastZ = Double.NaN;
+
     // Show HUD
     private static KeyBinding toggleHudKey;
     private static boolean showHud = true;
@@ -77,6 +82,39 @@ public class AntiAfkModClient implements ClientModInitializer {
             public void run() {
                 if (client.player == null || client.world == null || !antiAfkEnabled) return;
 
+                double x = client.player.getX();
+                double y = client.player.getY();
+                double z = client.player.getZ();
+
+                // Vérifie s'il y a eu téléportation
+                if (!Double.isNaN(lastX)) {
+                    double distance = Math.sqrt(Math.pow(x - lastX, 2) + Math.pow(y - lastY, 2) + Math.pow(z - lastZ, 2));
+                    if (distance > 5.0) {
+                        System.out.println("[AntiAFK] Téléportation détectée !");
+
+                        if (config.disconnectOnTeleport) {
+                            client.execute(() -> client.player.networkHandler.getConnection().disconnect(
+                                net.minecraft.text.Text.of("[AntiAFK] Déconnecté suite à une téléportation.")
+                            ));
+                            return;
+                        }
+
+                        if (config.disableAfkOnTeleport) {
+                            antiAfkEnabled = false;
+                            client.execute(() -> client.player.sendMessage(
+                                net.minecraft.text.Text.literal("[AntiAFK] Mod désactivé : téléportation détectée.").formatted(Formatting.RED),
+                                false
+                            ));
+                            return;
+                        }
+                    }
+                }
+
+                // Met à jour la position
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+
                 if (config.look) {
                     int repeats = config.minHeadRepeats + (int)(Math.random() * (config.maxHeadRepeats - config.minHeadRepeats + 1));
                     for (int i = 0; i < repeats; i++) {
@@ -101,8 +139,8 @@ public class AntiAfkModClient implements ClientModInitializer {
                     double dz = Math.sin(angle) * moveDistance;
                     double newX = client.player.getX() + dx;
                     double newZ = client.player.getZ() + dz;
-                    double y = client.player.getY();
-                    client.player.updatePosition(newX, y, newZ);
+                    double newY = client.player.getY();
+                    client.player.updatePosition(newX, newY, newZ);
                 }
 
                 if (config.jump) {
@@ -140,6 +178,11 @@ public class AntiAfkModClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (toggleAfkKey.wasPressed()) {
                 antiAfkEnabled = !antiAfkEnabled;
+                if (antiAfkEnabled) {
+                    lastX = client.player.getX();
+                    lastY = client.player.getY();
+                    lastZ = client.player.getZ();
+                }
                 client.player.sendMessage(
                         net.minecraft.text.Text.literal("[AntiAFK] Mode " + (antiAfkEnabled ? "activé" : "désactivé"))
                                 .formatted(antiAfkEnabled ? Formatting.GREEN : Formatting.RED),

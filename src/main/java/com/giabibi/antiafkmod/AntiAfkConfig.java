@@ -28,6 +28,9 @@ public class AntiAfkConfig {
     public float maxMoveIntensity = 1.0f;
     public double maxMoveDistance = 0.2;
 
+    public boolean disconnectOnTeleport = false;
+    public boolean disableAfkOnTeleport = false;
+
     public String keyToggleAfk = "key.keyboard.k";
     public String keyToggleHud = "key.keyboard.h";
 
